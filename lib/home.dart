@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bmi_app/result.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -8,8 +11,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isMail = true;
-  double heighVal = 170;
+  bool isMale = true;
+  double heighVal = 170.0;
   int weight = 55;
   int age = 18;
   @override
@@ -25,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
                     m1Expanded(context, 'male'),
@@ -37,13 +40,75 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.blueGrey,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Height',
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              heighVal.toStringAsFixed(1),
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                            Text(
+                              'CM',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ],
+                        ),
+                        Slider(
+                          min: 90,
+                          max: 220,
+                          value: heighVal,
+                          onChanged: (value) =>
+                              setState(() => heighVal = value),
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
                 child: Row(
                   children: [
                     m2Expanded(context, 'weight'),
                     const SizedBox(width: 15),
                     m2Expanded(context, 'age'),
                   ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.teal,
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 16,
+              child: TextButton(
+                onPressed: () {
+                  var result = weight / pow(heighVal / 100, 2);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Result(result: result, isMale: isMale, age: age),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Calculate',
+                  style: Theme.of(context).textTheme.headline2,
                 ),
               ),
             ),
@@ -56,11 +121,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Expanded m1Expanded(BuildContext context, String type) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => isMail = type == 'male' ? true : false),
+        onTap: () => setState(() => isMale = type == 'male' ? true : false),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: (isMail && type == 'male') || (!isMail && type == 'female')
+            color: (isMale && type == 'male') || (!isMale && type == 'female')
                 ? Colors.teal
                 : Colors.blueGrey,
           ),
@@ -112,7 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   mini: true,
                   child: const Icon(Icons.remove),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(
+                  width: 8,
+                ),
                 FloatingActionButton(
                   heroTag: type == 'age' ? 'age++' : 'weight++',
                   onPressed: () =>

@@ -40,20 +40,20 @@ class Result extends StatelessWidget {
             children: [
               Text(
                 'Gender: ${isMale ? 'Male' : 'Female'}',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.headline1,
               ),
               Text(
                 'Result: ${result.toStringAsFixed(1)}',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.headline1,
               ),
               Text(
                 'Healthiness: $resultPhrace',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.headline1,
                 textAlign: TextAlign.center,
               ),
               Text(
                 'Age: $age',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.headline1,
               ),
             ],
           ),
